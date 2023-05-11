@@ -9,7 +9,7 @@ module.exports = app => {
   app.use(passport.initialize())
   app.use(passport.session())
   // ---------------------------------------------------------LocalStrategy
-  passport(new LocalStrategy(
+  passport.use(new LocalStrategy(
     { usernameField: 'email' },
     // { usernameField: 'email', passReqToCallback: true },
     async (email, password, done) => {
