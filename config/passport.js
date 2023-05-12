@@ -11,17 +11,12 @@ module.exports = app => {
   // ---------------------------------------------------------LocalStrategy
   passport.use(new LocalStrategy(
     { usernameField: 'email' },
-    // { usernameField: 'email', passReqToCallback: true },
     async (email, password, done) => {
       try {
         const user = await User.findOne({ where: { email } })
-        if (!user) { return done(null, false) }
-        // if (!user) { return done(null, user, req.flash('warning', '此用戶尚未註冊')) }
-
+        if (!user) { return done(null, false, { type: 'message', message: 'That email is not registered!' }) }
         const isMatch = await bcrypt.compare(password, user.password)
-        if (!isMatch) { return done(null, false) }
-        // if (!isMatch) { return done(null, false, req.flash('warning', '密碼錯誤')) }
-
+        if (!isMatch) { return done(null, false, { type: 'message', message: 'Email or Password incorrect.' }) }
         return done(null, user)
       } catch (error) {
         console.log(error)

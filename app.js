@@ -26,13 +26,16 @@ app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 // 處理身份驗證
 usePassport(app)
-// app.use(flash())
-// app.use((req, res, next) => {
-//   res.locals.isAuthenticate = req.isAuthenticate()
-//   res.locals.user = req.user
-//   // res.flash.message = req.flash('message')
-//   next()
-// })
+// 顯示Flash訊息
+app.use(flash())
+// 設置請求變量
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.isAuthenticated()
+  res.locals.user = req.user
+  res.locals.message = req.flash('message')
+  next()
+})
+//路由
 app.use(routes)
 
 app.listen(PORT, () => {
